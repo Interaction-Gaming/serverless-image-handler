@@ -75,6 +75,17 @@ overrideWarningsEnabled=false npx cdk deploy\
    --profile <PROFILE_NAME>
 ```
 
+#### MSLC Deploy example:
+overrideWarningsEnabled=false npx cdk deploy\
+ --parameters CorsEnabledParameter=Yes\
+ --parameters CorsOriginParameter='*'\
+ --parameters SourceBucketsParameter=mslc-player-qa-document-upload\
+ --parameters DeployDemoUIParameter=No\
+ --parameters EnableSignatureParameter=Yes\
+ --parameters SecretsManagerSecretParameter=mslc-document-upload-qa\
+ --parameters SecretsManagerKeyParameter=SECRET_KEY\
+ --profile default
+
 _Note:_
 - **MY_BUCKET**: name of an existing bucket in your account
 - **PROFILE_NAME**: name of an AWS CLI profile that has appropriate credentials for deploying in your preferred region

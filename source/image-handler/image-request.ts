@@ -157,7 +157,11 @@ export class ImageRequest {
       const originalImage = await this.s3Client.getObject(imageLocation).promise();
       const imageBuffer = Buffer.from(originalImage.Body as Uint8Array);
 
-      if (originalImage.ContentType) {
+      if (key.endsWith(".heic")) {
+        result.contentType = ContentTypes.HEIC
+      } else if (key.endsWith(".heif")) {
+        result.contentType = ContentTypes.HEIF
+      } else if (originalImage.ContentType) {
         // If using default S3 ContentType infer from hex headers
         if (["binary/octet-stream", "application/octet-stream"].includes(originalImage.ContentType)) {
           result.contentType = this.inferImageType(imageBuffer);
