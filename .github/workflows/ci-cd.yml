@@ -75,5 +75,4 @@ jobs:
            --parameters S3KmsKeyArnParameter="${{ env.S3_KMS_KEY_ARN }}"
            --context solutionName=mslc-document-upload-image-handler-${{ env.STAGE }}
            --context stackName=mslc-document-upload-image-handler-${{ env.STAGE }}
-           --require-approval never
         working-directory: source/constructs
