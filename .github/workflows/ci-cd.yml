@@ -1,0 +1,80 @@
+Name: CI/CD
+
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+
+jobs:
+  test:
+    name: Unit Test Check
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: |
+          cd deployment
+          chmod +x ./run-unit-tests.sh && DEBUG=true ./run-unit-tests.sh
+
+  deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+      - name: Install libvips (to enable HEIC support for sharp)
+        run: sudo apt-get install -y libvips
+      - name: NPM install
+        run: npm ci --prefer-offline
+        working-directory: source/constructs
+      - name: Set QA Environment
+        if: github.base_ref == 'qa'
+        run: |
+          echo "STAGE=qa" >> $GITHUB_ENV
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.LOWER_ENV_AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.LOWER_ENV_AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+          echo "SOURCE_BUCKET=mslc-player-qa-document-upload" >> $GITHUB_ENV
+          echo "S3_KMS_KEY_ARN=arn:aws:kms:us-east-1:963973445526:key/9ea6ef14-c12a-42c6-9e6d-56cc0f389bb4" >> $GITHUB_ENV
+          echo "SIGNING_SECRET=mslc-document-upload-qa" >> $GITHUB_ENV
+      - name: Set UAT Environment
+        if: github.base_ref == 'uat'
+        run: |
+          echo "STAGE=uat" >> $GITHUB_ENV
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.LOWER_ENV_AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.LOWER_ENV_AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+          echo "SOURCE_BUCKET=mslc-player-uat-document-upload" >> $GITHUB_ENV
+          echo "S3_KMS_KEY_ARN=arn:aws:kms:us-east-1:963973445526:key/60c48e18-9e6c-4f74-84c7-5241fd45eca3" >> $GITHUB_ENV
+          echo "SIGNING_SECRET=mslc-document-upload-uat" >> $GITHUB_ENV
+      - name: Set Prod Environment
+        if: github.base_ref == 'master'
+        run: |
+          echo "STAGE=prod" >> $GITHUB_ENV
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.PROD_AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+      - name: Deploy Stack
+        run: |
+          overrideWarningsEnabled=false npx cdk deploy\
+           --parameters CorsEnabledParameter=Yes\
+           --parameters CorsOriginParameter='*'\
+           --parameters SourceBucketsParameter=${{ env.SOURCE_BUCKET }}\
+           --parameters DeployDemoUIParameter=No\
+           --parameters EnableSignatureParameter=Yes\
+           --parameters SecretsManagerSecretParameter=${{ env.SIGNING_SECRET }}\
+           --parameters SecretsManagerKeyParameter=SECRET_KEY\
+           --parameters S3KmsKeyArnParameter="${{ env.S3_KMS_KEY_ARN }}"\
+           --context solutionName=mslc-document-upload-image-handler-${{ env.STAGE }}\
+           --context stackName=mslc-document-upload-image-handler-${{ env.STAGE }}\
+           --require-approval never

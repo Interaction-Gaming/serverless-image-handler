@@ -84,9 +84,10 @@ overrideWarningsEnabled=false npx cdk deploy\
  --parameters EnableSignatureParameter=Yes\
  --parameters SecretsManagerSecretParameter=mslc-document-upload-qa\
  --parameters SecretsManagerKeyParameter=SECRET_KEY\
- --parameters S3KmsKeyArnParameter="arn:aws:kms:us-east-1:963973445526:key/9ea6ef14-c12a-42c6-9e6d-56cc0f389bb4"
- --context solutionName=mslc-document-upload-image-handler-qa
- --profile default
+ --parameters S3KmsKeyArnParameter="arn:aws:kms:us-east-1:963973445526:key/9ea6ef14-c12a-42c6-9e6d-56cc0f389bb4"\
+ --context solutionName=mslc-document-upload-image-handler-qa\
+ --context stackName=mslc-document-upload-image-handler-qa\
+ --require-approval never
 
 _Note:_
 - **MY_BUCKET**: name of an existing bucket in your account
