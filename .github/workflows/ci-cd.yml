@@ -65,7 +65,6 @@ jobs:
       - name: Deploy Stack
         run: >
           overrideWarningsEnabled=false npx cdk deploy
-           --require-approval=never
            --parameters CorsEnabledParameter=Yes
            --parameters CorsOriginParameter='*'
            --parameters SourceBucketsParameter=${{ env.SOURCE_BUCKET }}
@@ -74,6 +73,5 @@ jobs:
            --parameters SecretsManagerSecretParameter=${{ env.SIGNING_SECRET }}
            --parameters SecretsManagerKeyParameter=SECRET_KEY
            --parameters S3KmsKeyArnParameter="${{ env.S3_KMS_KEY_ARN }}"
-           --context solutionName=mslc-document-upload-image-handler-${{ env.STAGE }}
            --context stackName=mslc-document-upload-image-handler-${{ env.STAGE }}
         working-directory: source/constructs
