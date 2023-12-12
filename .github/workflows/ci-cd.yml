@@ -36,7 +36,7 @@ jobs:
       - name: Install libvips (to enable HEIC support for sharp)
         run: sudo apt-get install -y libvips
       - name: NPM install
-        run: npm ci --prefer-offline
+        run: npm run clean:install --verbose
         working-directory: source/constructs
       - name: Set QA Environment
         if: github.base_ref == 'qa'
