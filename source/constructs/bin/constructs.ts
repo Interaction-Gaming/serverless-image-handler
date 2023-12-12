@@ -21,7 +21,7 @@ if (DIST_OUTPUT_BUCKET && SOLUTION_NAME && VERSION)
 const app = new App();
 const solutionDisplayName = "Serverless Image Handler";
 const description = `(${app.node.tryGetContext("solutionId")}) - ${solutionDisplayName}. Version ${VERSION ?? app.node.tryGetContext("solutionVersion")}`;
-const stackName = app.node.tryGetContext("solutionId") || "ServerlessImageHandlerStack"
+const stackName = app.node.tryGetContext("stackName") || "ServerlessImageHandlerStack"
 // eslint-disable-next-line no-new
 new ServerlessImageHandlerStack(app, stackName, {
   synthesizer: synthesizer,

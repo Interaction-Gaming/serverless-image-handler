@@ -63,15 +63,5 @@ jobs:
           echo "AWS_ACCESS_KEY_ID=${{ secrets.PROD_AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
           echo "AWS_SECRET_ACCESS_KEY=${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
       - name: Deploy Stack
-        run: >
-          overrideWarningsEnabled=false npx cdk deploy
-           --parameters CorsEnabledParameter=Yes
-           --parameters CorsOriginParameter='*'
-           --parameters SourceBucketsParameter=${{ env.SOURCE_BUCKET }}
-           --parameters DeployDemoUIParameter=No
-           --parameters EnableSignatureParameter=Yes
-           --parameters SecretsManagerSecretParameter=${{ env.SIGNING_SECRET }}
-           --parameters SecretsManagerKeyParameter=SECRET_KEY
-           --parameters S3KmsKeyArnParameter="${{ env.S3_KMS_KEY_ARN }}"
-           --context stackName=mslc-document-upload-image-handler-${{ env.STAGE }}
+        run: overrideWarningsEnabled=false npx cdk deploy --parameters CorsEnabledParameter=Yes --parameters CorsOriginParameter='*' --parameters SourceBucketsParameter=${{ env.SOURCE_BUCKET }} --parameters DeployDemoUIParameter=No --parameters EnableSignatureParameter=Yes --parameters SecretsManagerSecretParameter=${{ env.SIGNING_SECRET }} --parameters SecretsManagerKeyParameter=SECRET_KEY --parameters S3KmsKeyArnParameter="${{ env.S3_KMS_KEY_ARN }}" --context stackName=mslc-document-upload-image-handler-${{ env.STAGE }}
         working-directory: source/constructs
