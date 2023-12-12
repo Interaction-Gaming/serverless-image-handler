@@ -65,6 +65,7 @@ jobs:
       - name: Deploy Stack
         run: >
           overrideWarningsEnabled=false npx cdk deploy
+           --require-approval never
            --parameters CorsEnabledParameter=Yes
            --parameters CorsOriginParameter='*'
            --parameters SourceBucketsParameter=${{ env.SOURCE_BUCKET }}
