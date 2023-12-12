@@ -35,6 +35,7 @@ export interface BackEndProps extends SolutionConstructProps {
   readonly logsBucket: IBucket;
   readonly uuid: string;
   readonly cloudFrontPriceClass: string;
+  readonly s3KmsKeyArn: string
 }
 
 export class BackEnd extends Construct {
@@ -49,35 +50,46 @@ export class BackEnd extends Construct {
     });
     props.secretsManagerPolicy.attachToRole(imageHandlerLambdaFunctionRole);
 
+    let statements = [
+      new PolicyStatement({
+        actions: ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"],
+        resources: [
+          Stack.of(this).formatArn({
+            service: "logs",
+            resource: "log-group",
+            resourceName: "/aws/lambda/*",
+            arnFormat: ArnFormat.COLON_RESOURCE_NAME,
+          }),
+        ],
+      }),
+      new PolicyStatement({
+        actions: ["s3:GetObject", "s3:PutObject", "s3:ListBucket"],
+        resources: [
+          Stack.of(this).formatArn({
+            service: "s3",
+            resource: "*",
+            region: "",
+            account: "",
+          }),
+        ],
+      }),
+      new PolicyStatement({
+        actions: ["rekognition:DetectFaces", "rekognition:DetectModerationLabels"],
+        resources: ["*"],
+      }),
+    ];
+
+    if (props.s3KmsKeyArn) {
+      statements.push(
+        new PolicyStatement({
+          actions: ["kms:decrypt"],
+          resources: [props.s3KmsKeyArn],
+        }),
+      )
+    }
+
     const imageHandlerLambdaFunctionRolePolicy = new Policy(this, "ImageHandlerFunctionPolicy", {
-      statements: [
-        new PolicyStatement({
-          actions: ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"],
-          resources: [
-            Stack.of(this).formatArn({
-              service: "logs",
-              resource: "log-group",
-              resourceName: "/aws/lambda/*",
-              arnFormat: ArnFormat.COLON_RESOURCE_NAME,
-            }),
-          ],
-        }),
-        new PolicyStatement({
-          actions: ["s3:GetObject", "s3:PutObject", "s3:ListBucket"],
-          resources: [
-            Stack.of(this).formatArn({
-              service: "s3",
-              resource: "*",
-              region: "",
-              account: "",
-            }),
-          ],
-        }),
-        new PolicyStatement({
-          actions: ["rekognition:DetectFaces", "rekognition:DetectModerationLabels"],
-          resources: ["*"],
-        }),
-      ],
+      statements: statements,
     });
 
     addCfnSuppressRules(imageHandlerLambdaFunctionRolePolicy, [
