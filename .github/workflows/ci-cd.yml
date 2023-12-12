@@ -33,10 +33,14 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16.x'
+      - name: Add Belnder Repo for libheif
+        run: sudo add-apt-repository -r ppa:savoury1/blender
+      - name: Update apt
+        run: sudo apt update
       - name: Install libheif (to enable HEIC support for sharp)
-        run: sudo apt-get install -y libheif-dev
+        run: sudo apt-get install -y libheif1 libheif-dev
       - name: Install libvips (to enable HEIC support for sharp)
-        run: sudo apt-get install -y libvips
+        run: sudo apt-get install -y libvips libvips-dev
       - name: NPM install
         run: npm run clean:install --verbose
         working-directory: source/constructs
