@@ -56,7 +56,8 @@ jobs:
           cd build
           meson compile
           meson test
-          sudo /home/runner/.local/bin/meson install
+          sudo pip3 install meson
+          sudo meson install
       - name: NPM install
         run: npm run clean:install --verbose
         working-directory: source/constructs
