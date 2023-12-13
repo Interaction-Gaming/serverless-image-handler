@@ -59,7 +59,7 @@ jobs:
           sudo pip3 install meson
           sudo meson install
       - name: NPM install
-        run: npm run clean:install --verbose
+        run: npm run clean:install && npm uninstall sharp && npm install --verbose --arch=x64 --platform=linux sharp@0.32.6
         working-directory: source/constructs
 
       # Deploy cloudformation stack with CDK
@@ -67,7 +67,7 @@ jobs:
         if: github.base_ref == 'qa'
         run: |
           echo "STAGE=qa" >> $GITHUB_ENV
-          echo "AWS_ACCESS_KEY_ID=${{ secrets.LOWER_ENV_AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+          echo "AWS_ACCESS_KEY_ID=$secrets.LOWER_ENV_AWS_ACCESS_KEY_ID }" >> $GITHUB_ENV
           echo "AWS_SECRET_ACCESS_KEY=${{ secrets.LOWER_ENV_AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
           echo "SOURCE_BUCKET=mslc-player-qa-document-upload" >> $GITHUB_ENV
           echo "S3_KMS_KEY_ARN=arn:aws:kms:us-east-1:963973445526:key/9ea6ef14-c12a-42c6-9e6d-56cc0f389bb4" >> $GITHUB_ENV
