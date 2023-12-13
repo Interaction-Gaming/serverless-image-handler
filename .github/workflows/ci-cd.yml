@@ -24,7 +24,7 @@ jobs:
       - name: install libcgif
         run: sudo add-apt-repository ppa:lovell/cgif && sudo apt-get update && sudo apt-get install libcgif-dev
       - name: Install libvips dependencies
-        run: sudo apt-get install -y libheif-dev libfftw3-dev libopenexr-dev libgsf-1-dev libglib2.0-dev libglib liborc-dev libopenslide-dev libmatio-dev libwebp-dev libjpeg-turbo8-dev libexpat1-dev libexif-dev libtiff5-dev libcfitsio-dev libpoppler-glib-dev librsvg2-dev libpango1.0-dev libopenjp2-7-dev libimagequant-dev
+        run: sudo apt-get install -y libheif-dev libfftw3-dev libopenexr-dev libgsf-1-dev libglib2.0-dev liborc-dev libopenslide-dev libmatio-dev libwebp-dev libjpeg-turbo8-dev libexpat1-dev libexif-dev libtiff5-dev libcfitsio-dev libpoppler-glib-dev librsvg2-dev libpango1.0-dev libopenjp2-7-dev libimagequant-dev
       - name: Install build tools
         run: sudo apt-get install build-essential ninja-build python3-pip bc wget
       - name: Remove system libvips
@@ -50,13 +50,13 @@ jobs:
 #      - run: pkg-config --modversion vips-cpp
 #      - run: npm install --verbose --arch=x64 --platform=linux --foreground-scripts --no-cache sharp@0.32.6
 #        working-directory: source/constructs
-      - run: ls /usr/local/lib
-      - run: ldconfig -p | grep nlibgobject
+#      - run: ls /usr/local/lib
+##      - run: ldconfig -p | grep nlibgobject
       - name: Create lib layer for lambda
         run: | 
           mkdir lib
-          cp /usr/local/lib/libvips.so.42 lib/
-          cp /usr/local/lib/libvips-cpp.so.42 lib/
+          cp -a /usr/lib/. lib/
+          cp -a /usr/local/lib/. lib/
           zip -r libvips-layer.zip lib
         working-directory: source/constructs/lib/back-end
 
