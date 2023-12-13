@@ -50,6 +50,10 @@ jobs:
 #      - run: pkg-config --modversion vips-cpp
 #      - run: npm install --verbose --arch=x64 --platform=linux --foreground-scripts --no-cache sharp@0.32.6
 #        working-directory: source/constructs
+      - run: ldd /usr/local/lib/libvips.so.42
+      - run: ldd /usr/local/lib/libvips-cpp.so.42
+      - run: readelf -d /usr/local/lib/libvips.so.42 | grep 'NEEDED'
+      - run: readelf -d /usr/local/lib/libvips-cpp.so.42 | grep 'NEEDED'
       - name: Create lib layer for lambda
         run: | 
           mkdir lib
@@ -120,6 +124,7 @@ jobs:
           cp /lib/x86_64-linux-gnu/libidn2.so.0 lib/
           cp /lib/x86_64-linux-gnu/librtmp.so.1 lib/
           cp /lib/x86_64-linux-gnu/libssh.so.4 lib/
+          cp /lib/x86_64-linux-gnu/libpsl.so.5 lib/
           zip -r libvips-layer.zip lib
         working-directory: source/constructs/lib/back-end
 
