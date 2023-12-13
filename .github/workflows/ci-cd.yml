@@ -102,6 +102,7 @@ jobs:
           cp /lib/x86_64-linux-gnu/libxcb-shm.so.0 lib/
           cp /lib/x86_64-linux-gnu/libxcb.so.1 lib/
           cp /lib/x86_64-linux-gnu/libxcb-render.so.0 lib/
+          cp /lib/x86_64-linux-gnu/libXrender.so.1 lib/
           zip -r libvips-layer.zip lib
         working-directory: source/constructs/lib/back-end
 
