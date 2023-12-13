@@ -116,6 +116,7 @@ jobs:
           cp /lib/x86_64-linux-gnu/libHalf.so.24 lib/
           cp /lib/x86_64-linux-gnu/libIex-2_3.so.24 lib/
           cp /lib/x86_64-linux-gnu/libblkid.so.1 lib/
+          cp /lib/x86_64-linux-gnu/libnghttp2.so.14 lib/
           zip -r libvips-layer.zip lib
         working-directory: source/constructs/lib/back-end
 
