@@ -50,7 +50,7 @@ jobs:
           wget https://github.com/libvips/libvips/releases/download/v8.13.3/vips-8.13.3.tar.gz
           tar xf vips-8.13.3.tar.gz
           cd vips-8.13.3
-          meson build --libdir=lib --buildtype=release -Dintrospection=disabled
+          meson build --libdir=lib --buildtype=release -Dintrospection=false
           cd build
           meson compile
           meson test
