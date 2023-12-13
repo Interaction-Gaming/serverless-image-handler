@@ -50,7 +50,7 @@ jobs:
 #      - run: pkg-config --modversion vips-cpp
 #      - run: npm install --verbose --arch=x64 --platform=linux --foreground-scripts --no-cache sharp@0.32.6
 #        working-directory: source/constructs
-      - run: ls /usr/lib
+      - run: ls /lib/x86_64-linux-gnu
       - run: ldconfig -p | grep libglib
       - name: Create lib layer for lambda
         run: | 
@@ -59,6 +59,8 @@ jobs:
           cp /usr/local/lib/libvips-cpp.so.42 lib/
           cp /lib/x86_64-linux-gnu/libgobject-2.0.so.0 lib/
           cp /lib/x86_64-linux-gnu/libgobject-2.0.so lib/
+          cp /lib/x86_64-linux-gnu/libglib-2.0.so.0 lib/
+          cp /lib/x86_64-linux-gnu/libglib-2.0.so lib/
           zip -r libvips-layer.zip lib
         working-directory: source/constructs/lib/back-end
 
