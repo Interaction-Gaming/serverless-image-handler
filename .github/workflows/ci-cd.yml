@@ -61,9 +61,7 @@ jobs:
       - name: NPM install
         run: npm run clean:install
         working-directory: source/constructs
-      - run: npm uninstall sharp
-        working-directory: source/constructs
-      - run: npm install --verbose --arch=x64 --platform=linux sharp@0.32.6
+      - run: npm rebuild --verbose sharp
         working-directory: source/constructs
 
       # Deploy cloudformation stack with CDK
