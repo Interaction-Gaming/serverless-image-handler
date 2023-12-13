@@ -7,7 +7,7 @@ on:
 jobs:
   test:
     name: Unit Test Check
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
         node-version: [16.x]
@@ -23,7 +23,7 @@ jobs:
   deploy:
     name: Build and Deploy
     needs: [ test ]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -33,6 +33,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16.x'
+
+      # Build our own libvips with HEIC support so that sharp will use that
+      # https://github.com/libvips/libvips/wiki/Build-for-Ubuntu
+      # https://github.com/libvips/libvips/issues/1511
       - name: install libcgif
         run: sudo add-apt-repository ppa:lovell/cgif && sudo apt-get update && sudo apt-get install libcgif-dev
       - name: Install libvips dependencies
@@ -54,6 +58,8 @@ jobs:
       - name: NPM install
         run: npm run clean:install --verbose
         working-directory: source/constructs
+
+      # Deploy cloudformation stack with CDK
       - name: Set QA Environment
         if: github.base_ref == 'qa'
         run: |
