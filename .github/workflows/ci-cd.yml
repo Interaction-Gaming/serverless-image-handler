@@ -66,8 +66,8 @@ jobs:
       - run: pkg-config --modversion vips-cpp
       - run: npm install --verbose --arch=x64 --platform=linux --foreground-scripts --no-cache sharp@0.32.6
         working-directory: source/constructs
-#      - run: ldd node_modules/sharp/build/Release/sharp.node
-#        working-directory: source/constructs
+      - run: ldd node_modules/sharp/build/Release/sharp.node
+        working-directory: source/image-handler
 
       # Deploy cloudformation stack with CDK
       - name: Set QA Environment
