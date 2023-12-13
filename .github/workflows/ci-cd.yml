@@ -90,6 +90,7 @@ jobs:
           cp /lib/x86_64-linux-gnu/libpng16.so.16 lib/
           cp /lib/x86_64-linux-gnu/libcairo.so.2 lib/
           cp /lib/x86_64-linux-gnu/liblcms2.so.2 lib/
+          cp /lib/x86_64-linux-gnu/libffi.so.7 lib/
           zip -r libvips-layer.zip lib
         working-directory: source/constructs/lib/back-end
 
