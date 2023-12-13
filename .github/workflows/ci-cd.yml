@@ -59,7 +59,9 @@ jobs:
           sudo pip3 install meson
           sudo meson install
       - name: NPM install
-        run: npm run clean:install && npm uninstall sharp && npm install --verbose --arch=x64 --platform=linux sharp@0.32.6
+        run: npm run clean:install
+      - run: npm uninstall sharp
+      - run: npm install --verbose --arch=x64 --platform=linux sharp@0.32.6
         working-directory: source/constructs
 
       # Deploy cloudformation stack with CDK
