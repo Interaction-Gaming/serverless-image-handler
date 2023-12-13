@@ -52,11 +52,31 @@ jobs:
 #        working-directory: source/constructs
       - run: ls /lib/x86_64-linux-gnu
       - run: ldconfig -p | grep libgio
+      - run: ldconfig -p | grep libheif
+      - run: ldconfig -p | grep libfftw
+      - run: ldconfig -p | grep libopenexr
+      - run: ldconfig -p | grep libgsf
+      - run: ldconfig -p | grep liborc
+      - run: ldconfig -p | grep libopenslide
+      - run: ldconfig -p | grep libmatio
+      - run: ldconfig -p | grep libwebp
+      - run: ldconfig -p | grep libjpeg
+      - run: ldconfig -p | grep libexpat
+      - run: ldconfig -p | grep libexif
+      - run: ldconfig -p | grep libtiff
+      - run: ldconfig -p | grep libcfitsio
+      - run: ldconfig -p | grep libpoppler
+      - run: ldconfig -p | grep librsvg
+      - run: ldconfig -p | grep libpango
+      - run: ldconfig -p | grep libopenjp
+      - run: ldconfig -p | grep libimagequant
       - name: Create lib layer for lambda
         run: | 
           mkdir lib
-          cp -a /usr/local/lib/. lib/ 
-          cp -a /lib/x86_64-linux-gnu/. /lib
+          cp /usr/local/lib/libvips.so.42 lib/
+          cp /usr/local/lib/libvips-cpp.so.42 lib/
+          cp /lib/x86_64-linux-gnu/libgobject-2.0.so.0 lib/
+          cp /lib/x86_64-linux-gnu/libglib-2.0.so.0 lib/
           zip -r libvips-layer.zip lib
         working-directory: source/constructs/lib/back-end
 
