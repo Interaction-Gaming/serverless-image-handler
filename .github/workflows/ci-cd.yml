@@ -51,16 +51,12 @@ jobs:
 #      - run: npm install --verbose --arch=x64 --platform=linux --foreground-scripts --no-cache sharp@0.32.6
 #        working-directory: source/constructs
       - run: ls /lib/x86_64-linux-gnu
-      - run: ldconfig -p | grep libglib
+      - run: ldconfig -p | grep libgio
       - name: Create lib layer for lambda
         run: | 
           mkdir lib
-          cp /usr/local/lib/libvips.so.42 lib/
-          cp /usr/local/lib/libvips-cpp.so.42 lib/
-          cp /lib/x86_64-linux-gnu/libgobject-2.0.so.0 lib/
-          cp /lib/x86_64-linux-gnu/libgobject-2.0.so lib/
-          cp /lib/x86_64-linux-gnu/libglib-2.0.so.0 lib/
-          cp /lib/x86_64-linux-gnu/libglib-2.0.so lib/
+          cp -a /usr/local/lib/. lib/ 
+          cp -a /lib/x86_64-linux-gnu/. /lib
           zip -r libvips-layer.zip lib
         working-directory: source/constructs/lib/back-end
 
