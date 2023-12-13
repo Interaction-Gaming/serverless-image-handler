@@ -98,6 +98,7 @@ jobs:
           cp /lib/x86_64-linux-gnu/libfribidi.so.0 lib/
           cp /lib/x86_64-linux-gnu/libthai.so.0 lib/
           cp /lib/x86_64-linux-gnu/libharfbuzz.so.0 lib/
+          cp /lib/x86_64-linux-gnu/libpixman-1.so.0 lib/
           zip -r libvips-layer.zip lib
         working-directory: source/constructs/lib/back-end
 
