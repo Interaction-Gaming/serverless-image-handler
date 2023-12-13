@@ -54,7 +54,7 @@ jobs:
       - run: ldconfig -p | grep libgio
       - run: ldconfig -p | grep libheif
       - run: ldconfig -p | grep libfftw
-      - run: ldconfig -p | grep libopenexr
+#      - run: ldconfig -p | grep libopenexr
       - run: ldconfig -p | grep libgsf
       - run: ldconfig -p | grep liborc
       - run: ldconfig -p | grep libopenslide
@@ -77,6 +77,11 @@ jobs:
           cp /usr/local/lib/libvips-cpp.so.42 lib/
           cp /lib/x86_64-linux-gnu/libgobject-2.0.so.0 lib/
           cp /lib/x86_64-linux-gnu/libglib-2.0.so.0 lib/
+          cp /lib/x86_64-linux-gnu/libgio-2.0.so.0 lib/
+          cp /lib/x86_64-linux-gnu/libheif.so.1 lib/
+          cp /lib/x86_64-linux-gnu/libfftw3.so.3 lib/
+          cp /lib/x86_64-linux-gnu/libfftw3_omp.so.3 lib/
+          cp /lib/x86_64-linux-gnu/libfftw3_threads.so.3 lib/
           zip -r libvips-layer.zip lib
         working-directory: source/constructs/lib/back-end
 
