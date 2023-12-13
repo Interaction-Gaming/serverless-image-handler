@@ -43,6 +43,7 @@ jobs:
         run: sudo apt-get install -y libheif-dev libfftw3-dev libopenexr-dev libgsf-1-dev libglib2.0-dev liborc-dev libopenslide-dev libmatio-dev libwebp-dev libjpeg-turbo8-dev libexpat1-dev libexif-dev libtiff5-dev libcfitsio-dev libpoppler-glib-dev librsvg2-dev libpango1.0-dev libopenjp2-7-dev libimagequant-dev
       - name: Install build tools
         run: sudo apt-get install build-essential ninja-build python3-pip bc wget && pip3 install meson && sudo ln -s /usr/local/bin/meson /usr/bin/meson
+      - run: which meson
       - name: Remove system libvips
         run: sudo apt-get remove libvips42
       - name: Build libvips with HEIC support
