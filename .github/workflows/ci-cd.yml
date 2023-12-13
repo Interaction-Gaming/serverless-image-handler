@@ -81,6 +81,7 @@ jobs:
           echo "SOURCE_BUCKET=mslc-player-qa-document-upload" >> $GITHUB_ENV
           echo "S3_KMS_KEY_ARN=arn:aws:kms:us-east-1:963973445526:key/9ea6ef14-c12a-42c6-9e6d-56cc0f389bb4" >> $GITHUB_ENV
           echo "SIGNING_SECRET=mslc-document-upload-qa" >> $GITHUB_ENV
+          rm -r ~/.aws
       - name: Set UAT Environment
         if: github.base_ref == 'uat'
         run: |
