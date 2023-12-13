@@ -50,26 +50,8 @@ jobs:
 #      - run: pkg-config --modversion vips-cpp
 #      - run: npm install --verbose --arch=x64 --platform=linux --foreground-scripts --no-cache sharp@0.32.6
 #        working-directory: source/constructs
-      - run: ls /lib/x86_64-linux-gnu
-      - run: ldconfig -p | grep libgio
-      - run: ldconfig -p | grep libheif
-      - run: ldconfig -p | grep libfftw
-#      - run: ldconfig -p | grep libopenexr
-      - run: ldconfig -p | grep libgsf
-      - run: ldconfig -p | grep liborc
-      - run: ldconfig -p | grep libopenslide
-      - run: ldconfig -p | grep libmatio
-      - run: ldconfig -p | grep libwebp
-      - run: ldconfig -p | grep libjpeg
-      - run: ldconfig -p | grep libexpat
-      - run: ldconfig -p | grep libexif
-      - run: ldconfig -p | grep libtiff
-      - run: ldconfig -p | grep libcfitsio
-      - run: ldconfig -p | grep libpoppler
-      - run: ldconfig -p | grep librsvg
-      - run: ldconfig -p | grep libpango
-      - run: ldconfig -p | grep libopenjp
-      - run: ldconfig -p | grep libimagequant
+      - run: ldconfig -p | grep libgmodule
+      - run: ldconfig -p | grep libIlmImf
       - name: Create lib layer for lambda
         run: | 
           mkdir lib
@@ -82,6 +64,27 @@ jobs:
           cp /lib/x86_64-linux-gnu/libfftw3.so.3 lib/
           cp /lib/x86_64-linux-gnu/libfftw3_omp.so.3 lib/
           cp /lib/x86_64-linux-gnu/libfftw3_threads.so.3 lib/
+          cp /lib/x86_64-linux-gnu/libgsf-1.so.114 lib/
+          cp /lib/x86_64-linux-gnu/liborc-0.4.so.0 lib/
+          cp /lib/x86_64-linux-gnu/libopenslide.so.0 lib/
+          cp /lib/x86_64-linux-gnu/libmatio.so.9 lib/
+          cp /lib/x86_64-linux-gnu/libwebp.so.6 lib/
+          cp /lib/x86_64-linux-gnu/libwebpdemux.so.2 lib/
+          cp /lib/x86_64-linux-gnu/libwebpmux.so.3 lib/
+          cp /lib/x86_64-linux-gnu/libjpeg.so.8 lib/
+          cp /lib/x86_64-linux-gnu/libexpat.so.1 lib/
+          cp /lib/x86_64-linux-gnu/libexif.so.12 lib/
+          cp /lib/x86_64-linux-gnu/libtiff.so.5 lib/
+          cp /lib/x86_64-linux-gnu/libcfitsio.so.8 lib/
+          cp /lib/x86_64-linux-gnu/libpoppler-glib.so.8 lib/
+          cp /lib/x86_64-linux-gnu/libpoppler.so.97 lib/
+          cp /lib/x86_64-linux-gnu/librsvg-2.so.2 lib/
+          cp /lib/x86_64-linux-gnu/libpango-1.0.so.0 lib/
+          cp /lib/x86_64-linux-gnu/libpangocairo-1.0.so.0 lib/
+          cp /lib/x86_64-linux-gnu/libpangoft2-1.0.so.0 lib/
+          cp /lib/x86_64-linux-gnu/libpangoxft-1.0.so.0 lib/
+          cp /lib/x86_64-linux-gnu/libopenjp2.so.7 lib/
+          cp /lib/x86_64-linux-gnu/libimagequant.so.0 lib/
           zip -r libvips-layer.zip lib
         working-directory: source/constructs/lib/back-end
 
