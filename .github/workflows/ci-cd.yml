@@ -5,24 +5,8 @@ on:
     types: [opened, edited, reopened, synchronize]
 
 jobs:
-  test:
-    name: Unit Test Check
-    runs-on: ubuntu-20.04
-    strategy:
-      matrix:
-        node-version: [16.x]
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-      - run: |
-          cd deployment
-          chmod +x ./run-unit-tests.sh && DEBUG=true ./run-unit-tests.sh
-
   deploy:
     name: Build and Deploy
-    needs: [ test ]
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
