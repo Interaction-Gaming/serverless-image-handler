@@ -49,9 +49,9 @@ jobs:
         run: |
           pip3 install meson
           export PATH=$PATH:/home/runner/.local/bin
-          wget https://github.com/libvips/libvips/releases/download/v8.13.3/vips-8.13.3.tar.gz
-          tar xf vips-8.13.3.tar.gz
-          cd vips-8.13.3
+          wget https://github.com/libvips/libvips/releases/download/v8.15.0/vips-8.15.0.tar.xz
+          tar xf vips-8.15.0.tar.xz
+          cd vips-8.15.0
           meson build --libdir=lib --buildtype=release -Dintrospection=false
           cd build
           meson compile
@@ -63,6 +63,7 @@ jobs:
         working-directory: source/constructs
       - run: npm uninstall sharp
         working-directory: source/constructs
+      - run: pkg-config --modversion vips-cpp
       - run: npm install --verbose --arch=x64 --platform=linux --foreground-scripts --no-cache sharp@0.32.6
         working-directory: source/constructs
 
