@@ -50,7 +50,6 @@ jobs:
 #      - run: pkg-config --modversion vips-cpp
 #      - run: npm install --verbose --arch=x64 --platform=linux --foreground-scripts --no-cache sharp@0.32.6
 #        working-directory: source/constructs
-#      - run: ldconfig -p | grep libgmodule
       - name: Create lib layer for lambda
         run: | 
           mkdir lib
@@ -87,6 +86,7 @@ jobs:
           cp /lib/x86_64-linux-gnu/libgmodule-2.0.so.0 lib/
           cp /lib/x86_64-linux-gnu/libIlmImf-2_3.so.24 lib/
           cp /lib/x86_64-linux-gnu/libIlmImfUtil-2_3.so.24 lib/
+          cp /lib/x86_64-linux-gnu/libcgif.so.0 lib/
           zip -r libvips-layer.zip lib
         working-directory: source/constructs/lib/back-end
 
