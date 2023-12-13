@@ -88,6 +88,7 @@ jobs:
           cp /lib/x86_64-linux-gnu/libIlmImfUtil-2_3.so.24 lib/
           cp /lib/x86_64-linux-gnu/libcgif.so.0 lib/
           cp /lib/x86_64-linux-gnu/libpng16.so.16 lib/
+          cp /lib/x86_64-linux-gnu/libcairo.so.2 lib/
           zip -r libvips-layer.zip lib
         working-directory: source/constructs/lib/back-end
 
