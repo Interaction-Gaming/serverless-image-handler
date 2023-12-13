@@ -74,22 +74,17 @@ jobs:
         if: github.base_ref == 'qa'
         run: |
           echo "STAGE=qa" >> $GITHUB_ENV
-          echo "AWS_ACCESS_KEY_ID=$secrets.LOWER_ENV_AWS_ACCESS_KEY_ID }" >> $GITHUB_ENV
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.LOWER_ENV_AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
           echo "AWS_SECRET_ACCESS_KEY=${{ secrets.LOWER_ENV_AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
-          echo "CDK_DEPLOY_ACCOUNT=963973445526" >> $GITHUB_ENV
-          echo "CDK_DEPLOY_REGION=us-east-1" >> $GITHUB_ENV
           echo "SOURCE_BUCKET=mslc-player-qa-document-upload" >> $GITHUB_ENV
           echo "S3_KMS_KEY_ARN=arn:aws:kms:us-east-1:963973445526:key/9ea6ef14-c12a-42c6-9e6d-56cc0f389bb4" >> $GITHUB_ENV
           echo "SIGNING_SECRET=mslc-document-upload-qa" >> $GITHUB_ENV
-          rm -r ~/.aws
       - name: Set UAT Environment
         if: github.base_ref == 'uat'
         run: |
           echo "STAGE=uat" >> $GITHUB_ENV
           echo "AWS_ACCESS_KEY_ID=${{ secrets.LOWER_ENV_AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
           echo "AWS_SECRET_ACCESS_KEY=${{ secrets.LOWER_ENV_AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
-          echo "CDK_DEPLOY_ACCOUNT=963973445526" >> $GITHUB_ENV
-          echo "CDK_DEPLOY_REGION=us-east-1" >> $GITHUB_ENV
           echo "SOURCE_BUCKET=mslc-player-uat-document-upload" >> $GITHUB_ENV
           echo "S3_KMS_KEY_ARN=arn:aws:kms:us-east-1:963973445526:key/60c48e18-9e6c-4f74-84c7-5241fd45eca3" >> $GITHUB_ENV
           echo "SIGNING_SECRET=mslc-document-upload-uat" >> $GITHUB_ENV
