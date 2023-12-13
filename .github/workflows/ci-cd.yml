@@ -52,7 +52,7 @@ jobs:
           wget https://github.com/libvips/libvips/releases/download/v8.15.0/vips-8.15.0.tar.xz
           tar xf vips-8.15.0.tar.xz
           cd vips-8.15.0
-          meson build --libdir=lib --buildtype=release -Dintrospection=false
+          meson build --libdir=lib --buildtype=release -Dintrospection=disabled
           cd build
           meson compile
           meson test
@@ -65,6 +65,8 @@ jobs:
         working-directory: source/constructs
       - run: pkg-config --modversion vips-cpp
       - run: npm install --verbose --arch=x64 --platform=linux --foreground-scripts --no-cache sharp@0.32.6
+        working-directory: source/constructs
+      - run: ldd node_modules/sharp/build/Release/sharp.node
         working-directory: source/constructs
 
       # Deploy cloudformation stack with CDK
