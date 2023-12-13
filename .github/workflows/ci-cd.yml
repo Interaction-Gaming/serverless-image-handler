@@ -57,7 +57,8 @@ jobs:
           mkdir lib
           cp /usr/local/lib/libvips.so.42 lib/
           cp /usr/local/lib/libvips-cpp.so.42 lib/
-          cp /usr/lib/libgobject-2.0.so.0 lib/
+          cp /lib/x86_64-linux-gnu/libgobject-2.0.so.0 lib/
+          cp /lib/x86_64-linux-gnu/libgobject-2.0.so lib/
           zip -r libvips-layer.zip lib
         working-directory: source/constructs/lib/back-end
 
