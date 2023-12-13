@@ -66,6 +66,8 @@ jobs:
       - run: pkg-config --modversion vips-cpp
       - run: npm install --verbose --arch=x64 --platform=linux --foreground-scripts --no-cache sharp@0.32.6
         working-directory: source/constructs
+      - run: ls -la node_modules/sharp/build/Release
+        working-directory: source/constructs
       - run: ldd node_modules/sharp/build/Release/sharp-linux-x64.node
         working-directory: source/constructs
 
