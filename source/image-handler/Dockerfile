@@ -1,7 +1,7 @@
 # Define custom function directory
 ARG FUNCTION_DIR="/function"
 
-FROM node:16
+FROM node:16-bookworm
 
 # Include global arg in this stage of the build
 ARG FUNCTION_DIR
@@ -16,6 +16,7 @@ RUN apt-get update && \
     build-essential \
     ninja-build \
     python3-pip \
+    meson \
     bc \
     wget \
     libcurl4-openssl-dev \
@@ -30,7 +31,7 @@ RUN apt-get update && \
     libopenslide-dev \
     libmatio-dev \
     libwebp-dev \
-    libjpeg-turbo8-dev \
+    libjpeg-dev \
     libexpat1-dev \
     libexif-dev \
     libtiff5-dev \
@@ -43,8 +44,7 @@ RUN apt-get update && \
     apt-get remove libvips42
 
 # Build libvips
-RUN pip3 install meson && \
-    wget https://github.com/libvips/libvips/releases/download/v8.15.0/vips-8.15.0.tar.xz && \
+RUN wget https://github.com/libvips/libvips/releases/download/v8.15.0/vips-8.15.0.tar.xz && \
     tar xf vips-8.15.0.tar.xz && \
     cd vips-8.15.0 && \
     meson build --libdir=lib --buildtype=release -Dintrospection=disabled && \
