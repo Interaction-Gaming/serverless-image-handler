@@ -124,7 +124,7 @@ jobs:
           cp /lib/x86_64-linux-gnu/libldap-2.5.so.0 lib/
           cp /lib/x86_64-linux-gnu/liblzma.so.5 lib/
           cp /lib/x86_64-linux-gnu/libm.so.6 lib/
-          cp /lib/x86_64-linux-gnu/libmatio.so.9 lib/
+          cp /lib/x86_64-linux-gnu/libmatio.so.11 lib/
           cp /lib/x86_64-linux-gnu/libmount.so.1 lib/
           cp /lib/x86_64-linux-gnu/libnettle.so.7 lib/
           cp /lib/x86_64-linux-gnu/libnghttp2.so.14 lib/
