@@ -159,7 +159,6 @@ jobs:
           cp /lib/x86_64-linux-gnu/libwebp.so.7 lib/
           cp /lib/x86_64-linux-gnu/libwebpdemux.so.2 lib/
           cp /lib/x86_64-linux-gnu/libwebpmux.so.3 lib/
-          cp /lib/x86_64-linux-gnu/libwind.so.0 lib/
           cp /lib/x86_64-linux-gnu/libxcb-render.so.0 lib/
           cp /lib/x86_64-linux-gnu/libxcb-shm.so.0 lib/
           cp /lib/x86_64-linux-gnu/libxcb.so.1 lib/
