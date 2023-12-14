@@ -140,8 +140,6 @@ jobs:
           cp /lib/x86_64-linux-gnu/libpcre2-8.so.0 lib/
           cp /lib/x86_64-linux-gnu/libpixman-1.so.0 lib/
           cp /lib/x86_64-linux-gnu/libpng16.so.16 lib/
-          cp /lib/x86_64-linux-gnu/libpoppler-glib.so.8 lib/
-          cp /lib/x86_64-linux-gnu/libpoppler.so.97 lib/
           cp /lib/x86_64-linux-gnu/libpsl.so.5 lib/
           cp /lib/x86_64-linux-gnu/libpthread.so.0 lib/
           cp /lib/x86_64-linux-gnu/libresolv.so.2 lib/
