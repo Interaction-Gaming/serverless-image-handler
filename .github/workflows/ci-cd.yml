@@ -69,7 +69,6 @@ jobs:
           cp /lib/x86_64-linux-gnu/libXext.so.6 lib/
           cp /lib/x86_64-linux-gnu/libXrender.so.1 lib/
           cp /lib/x86_64-linux-gnu/libaec.so.0 lib/
-          cp /lib/x86_64-linux-gnu/libasn1.so.8 lib/
           cp /lib/x86_64-linux-gnu/libblkid.so.1 lib/
           cp /lib/x86_64-linux-gnu/libbrotlicommon.so.1 lib/
           cp /lib/x86_64-linux-gnu/libbrotlidec.so.1 lib/
