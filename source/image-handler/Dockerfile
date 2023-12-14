@@ -58,6 +58,9 @@ RUN mkdir -p ${FUNCTION_DIR}
 COPY . ${FUNCTION_DIR}
 
 WORKDIR ${FUNCTION_DIR}
+RUN npm install
+RUN npm run build
+RUN rm -rf node_modules
 
 # Install Node.js dependencies
 RUN npm ci && rm -rf node_modules/sharp && npm install --arch=x64 --platform=linux sharp
@@ -78,4 +81,4 @@ WORKDIR ${FUNCTION_DIR}
 # Set runtime interface client as default command for the container runtime
 ENTRYPOINT ["/usr/local/bin/npx", "aws-lambda-ric"]
 # Pass the name of the function handler as an argument to the runtime
-CMD ["index.handler"]
+CMD ["dist/image-handler/index.handler"]
