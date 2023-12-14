@@ -51,7 +51,9 @@ RUN wget https://github.com/libvips/libvips/releases/download/v8.15.0/vips-8.15.
     cd build && \
     meson compile && \
     meson test && \
-    meson install
+    meson install && \
+    echo "/usr/local/lib" > /etc/ld.so.conf.d/usrlocal.conf && \
+    ldconfig -v
 
 # Copy function code
 RUN mkdir -p ${FUNCTION_DIR}
