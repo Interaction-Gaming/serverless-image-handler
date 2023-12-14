@@ -55,15 +55,12 @@ RUN wget https://github.com/libvips/libvips/releases/download/v8.15.0/vips-8.15.
 
 # Copy function code
 RUN mkdir -p ${FUNCTION_DIR}
-COPY ./image-handler ${FUNCTION_DIR}
-COPY ./solution-utils ${FUNCTION_DIR}
+COPY . ${FUNCTION_DIR}
 
-WORKDIR ${FUNCTION_DIR}/image-handler
-RUN npm run clean:install
-RUN npm run build
+WORKDIR ${FUNCTION_DIR}
 
 # Install Node.js dependencies
-RUN rm -rf node_modules/sharp && npm install --arch=x64 --platform=linux sharp
+RUN npm ci && rm -rf node_modules/sharp && npm install --arch=x64 --platform=linux sharp
 
 # Install the runtime interface client
 RUN npm install aws-lambda-ric
@@ -81,4 +78,4 @@ WORKDIR ${FUNCTION_DIR}
 # Set runtime interface client as default command for the container runtime
 ENTRYPOINT ["/usr/local/bin/npx", "aws-lambda-ric"]
 # Pass the name of the function handler as an argument to the runtime
-CMD ["image-handler/dist/image-handler/index.handler"]
+CMD ["dist/image-handler/index.handler"]

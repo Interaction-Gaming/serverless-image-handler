@@ -21,6 +21,9 @@ jobs:
       - name: NPM install
         run: npm run clean:install
         working-directory: source/constructs
+      - name: Build image handler
+        run: npm run build
+        working-directory: source/image-handler
 
       # Deploy cloudformation stack with CDK
       - name: Set QA Environment
