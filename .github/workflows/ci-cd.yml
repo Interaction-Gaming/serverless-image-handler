@@ -109,8 +109,8 @@ jobs:
           cp /lib/x86_64-linux-gnu/libhdf5_serial.so.103 lib/
           cp /lib/x86_64-linux-gnu/libheif.so.1 lib/
           cp /lib/x86_64-linux-gnu/libhogweed.so.6 lib/
-          cp /lib/x86_64-linux-gnu/libicudata.so.66 lib/
-          cp /lib/x86_64-linux-gnu/libicuuc.so.66 lib/
+          cp /lib/x86_64-linux-gnu/libicudata.so.70 lib/
+          cp /lib/x86_64-linux-gnu/libicuuc.so.70 lib/
           cp /lib/x86_64-linux-gnu/libidn2.so.0 lib/
           cp /lib/x86_64-linux-gnu/libimagequant.so.0 lib/
           cp /lib/x86_64-linux-gnu/libjbig.so.0 lib/
