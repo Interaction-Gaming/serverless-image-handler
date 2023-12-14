@@ -77,7 +77,7 @@ jobs:
           cp /lib/x86_64-linux-gnu/libc.so.6 lib/
           cp /lib/x86_64-linux-gnu/libcairo-gobject.so.2 lib/
           cp /lib/x86_64-linux-gnu/libcairo.so.2 lib/
-          cp /lib/x86_64-linux-gnu/libcfitsio.so.8 lib/
+          cp /lib/x86_64-linux-gnu/libcfitsio.so.9 lib/
           cp /lib/x86_64-linux-gnu/libcgif.so.0 lib/
           cp /lib/x86_64-linux-gnu/libcom_err.so.2 lib/
           cp /lib/x86_64-linux-gnu/libcrypt.so.1 lib/
