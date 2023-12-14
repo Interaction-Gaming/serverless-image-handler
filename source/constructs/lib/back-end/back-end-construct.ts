@@ -101,7 +101,7 @@ export class BackEnd extends Construct {
       memorySize: 1024,
       timeout: Duration.minutes(15),
       role: imageHandlerLambdaFunctionRole,
-      code: DockerImageCode.fromImageAsset(path.join(__dirname, "../../../image-handler")),
+      code: DockerImageCode.fromImageAsset(path.join(__dirname, "../../../../source")),
       environment: {
         AUTO_WEBP: props.autoWebP,
         CORS_ENABLED: props.corsEnabled,
