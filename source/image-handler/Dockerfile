@@ -56,6 +56,7 @@ RUN wget https://github.com/libvips/libvips/releases/download/v8.15.0/vips-8.15.
 # Copy function code
 RUN mkdir -p ${FUNCTION_DIR}
 COPY . ${FUNCTION_DIR}
+COPY ../solution-utils ${FUNCTION_DIR}
 
 WORKDIR ${FUNCTION_DIR}
 RUN npm install
