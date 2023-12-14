@@ -102,6 +102,7 @@ jobs:
           cp /lib/x86_64-linux-gnu/libgmp.so.10 lib/
           cp /lib/x86_64-linux-gnu/libgnutls.so.30 lib/
           cp /lib/x86_64-linux-gnu/libgobject-2.0.so.0 lib/
+          cp /lib/x86_64-linux-gnu/libgomp.so.1 lib/
           cp /lib/x86_64-linux-gnu/libgraphite2.so.3 lib/
           cp /lib/x86_64-linux-gnu/libgsf-1.so.114 lib/
           cp /lib/x86_64-linux-gnu/libgssapi_krb5.so.2 lib/
