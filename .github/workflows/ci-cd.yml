@@ -119,9 +119,9 @@ jobs:
           cp /lib/x86_64-linux-gnu/libkeyutils.so.1 lib/
           cp /lib/x86_64-linux-gnu/libkrb5.so.3 lib/
           cp /lib/x86_64-linux-gnu/libkrb5support.so.0 lib/
-          cp /lib/x86_64-linux-gnu/liblber-2.4.so.2 lib/
+          cp /lib/x86_64-linux-gnu/liblber-2.5.so.0 lib/
           cp /lib/x86_64-linux-gnu/liblcms2.so.2 lib/
-          cp /lib/x86_64-linux-gnu/libldap_r-2.4.so.2 lib/
+          cp /lib/x86_64-linux-gnu/libldap-2.5.so.0 lib/
           cp /lib/x86_64-linux-gnu/liblzma.so.5 lib/
           cp /lib/x86_64-linux-gnu/libm.so.6 lib/
           cp /lib/x86_64-linux-gnu/libmatio.so.9 lib/
