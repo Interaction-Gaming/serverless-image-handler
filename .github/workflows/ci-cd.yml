@@ -52,8 +52,8 @@ jobs:
 #        working-directory: source/constructs
       - run: ldd /usr/local/lib/libvips.so.42
       - run: ldd /usr/local/lib/libvips-cpp.so.42
-      - run: readelf -d /usr/local/lib/libvips.so.42 | grep 'NEEDED'
-      - run: readelf -d /usr/local/lib/libvips-cpp.so.42 | grep 'NEEDED'
+      - run: ldd /lib/x86_64-linux-gnu/libm.so.6
+      - run: ldconfig -p | grep glibc
       - name: Create lib layer for lambda
         run: | 
           mkdir lib
