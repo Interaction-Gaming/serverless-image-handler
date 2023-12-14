@@ -143,7 +143,6 @@ jobs:
           cp /lib/x86_64-linux-gnu/libpsl.so.5 lib/
           cp /lib/x86_64-linux-gnu/libpthread.so.0 lib/
           cp /lib/x86_64-linux-gnu/libresolv.so.2 lib/
-          cp /lib/x86_64-linux-gnu/libroken.so.18 lib/
           cp /lib/x86_64-linux-gnu/librsvg-2.so.2 lib/
           cp /lib/x86_64-linux-gnu/librtmp.so.1 lib/
           cp /lib/x86_64-linux-gnu/libsasl2.so.2 lib/
