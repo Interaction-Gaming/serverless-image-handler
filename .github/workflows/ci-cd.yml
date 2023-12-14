@@ -84,6 +84,7 @@ jobs:
           cp /lib/x86_64-linux-gnu/libcrypto.so.1.1 lib/
           cp /lib/x86_64-linux-gnu/libcurl-gnutls.so.4 lib/
           cp /lib/x86_64-linux-gnu/libdatrie.so.1 lib/
+          cp /lib/x86_64-linux-gnu/libdeflate.so.0 lib/
           cp /lib/x86_64-linux-gnu/libdl.so.2 lib/
           cp /lib/x86_64-linux-gnu/libexif.so.12 lib/
           cp /lib/x86_64-linux-gnu/libexpat.so.1 lib/
