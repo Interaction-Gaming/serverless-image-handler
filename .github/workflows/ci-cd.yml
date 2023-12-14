@@ -63,6 +63,7 @@ jobs:
           cp /lib/x86_64-linux-gnu/libIlmImf-2_5.so.25 lib/
           cp /lib/x86_64-linux-gnu/libIlmImfUtil-2_5.so.25 lib/
           cp /lib/x86_64-linux-gnu/libIlmThread-2_5.so.25 lib/
+          cp /lib/x86_64-linux-gnu/libImath-2_5.so.25 lib/
           cp /lib/x86_64-linux-gnu/libX11.so.6 lib/
           cp /lib/x86_64-linux-gnu/libXau.so.6 lib/
           cp /lib/x86_64-linux-gnu/libXdmcp.so.6 lib/
