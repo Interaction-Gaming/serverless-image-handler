@@ -3,7 +3,7 @@
   "requireApproval": "never",
   "context": {
     "solutionId": "SO0023",
-    "solutionVersion": "custom-v6.2.3",
+    "solutionVersion": "custom-v6.2.4",
     "solutionName": "serverless-image-handler"
   }
 }

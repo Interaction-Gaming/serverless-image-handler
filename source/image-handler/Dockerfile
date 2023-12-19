@@ -1,7 +1,7 @@
 # Define custom function directory
 ARG FUNCTION_DIR="/function"
 
-FROM node:16-bookworm
+FROM node:20-bookworm
 
 # Include global arg in this stage of the build
 ARG FUNCTION_DIR
