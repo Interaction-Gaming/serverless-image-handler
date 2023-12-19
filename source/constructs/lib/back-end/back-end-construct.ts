@@ -26,6 +26,7 @@ import { CloudFrontToApiGatewayToLambda } from "@aws-solutions-constructs/aws-cl
 
 import { addCfnSuppressRules } from "../../utils/utils";
 import { SolutionConstructProps } from "../types";
+import * as api from "aws-cdk-lib/aws-apigateway";
 
 export interface BackEndProps extends SolutionConstructProps {
   readonly solutionVersion: string;
@@ -99,7 +100,7 @@ export class BackEnd extends Construct {
     const imageHandlerLambdaFunction = new DockerImageFunction(this, "ImageHandlerLambdaFunction", {
       description: `${props.solutionName} (${props.solutionVersion}): Performs image edits and manipulations`,
       memorySize: 1024,
-      timeout: Duration.minutes(15),
+      timeout: Duration.seconds(29),
       role: imageHandlerLambdaFunctionRole,
       code: DockerImageCode.fromImageAsset(path.join(__dirname, "../../../image-handler")),
       environment: {
@@ -135,7 +136,7 @@ export class BackEnd extends Construct {
       defaultTtl: Duration.days(1),
       minTtl: Duration.seconds(1),
       maxTtl: Duration.days(365),
-      enableAcceptEncodingGzip: true,
+      enableAcceptEncodingGzip: false,
       headerBehavior: CacheHeaderBehavior.allowList("origin", "accept"),
       queryStringBehavior: CacheQueryStringBehavior.allowList("signature"),
     });
@@ -191,6 +192,9 @@ export class BackEnd extends Construct {
         stageName: "image",
       },
       binaryMediaTypes: ["*/*"],
+      defaultMethodOptions: {
+        authorizationType: api.AuthorizationType.NONE,
+      },
     };
 
     const imageHandlerCloudFrontApiGatewayLambda = new CloudFrontToApiGatewayToLambda(
@@ -204,6 +208,14 @@ export class BackEnd extends Construct {
         apiGatewayProps,
       }
     );
+
+    addCfnSuppressRules(imageHandlerCloudFrontApiGatewayLambda.apiGateway, [
+      {
+        id: "W59",
+        reason:
+          "AWS::ApiGateway::Method AuthorizationType is set to 'NONE' because API Gateway behind CloudFront does not support AWS_IAM authentication",
+      },
+    ]);
 
     imageHandlerCloudFrontApiGatewayLambda.apiGateway.node.tryRemoveChild("Endpoint"); // we don't need the RestApi endpoint in the outputs
 
