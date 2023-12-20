@@ -8,6 +8,7 @@ jobs:
   deploy:
     name: Build and Deploy
     runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true && (github.base_ref == 'qa' || github.base_ref == 'uat' || github.base_ref == 'main')
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -50,6 +51,9 @@ jobs:
           echo "STAGE=prod" >> $GITHUB_ENV
           echo "AWS_ACCESS_KEY_ID=${{ secrets.PROD_AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
           echo "AWS_SECRET_ACCESS_KEY=${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+          echo "SOURCE_BUCKET=mslc-player-prod-document-upload" >> $GITHUB_ENV
+          echo "S3_KMS_KEY_ARN=arn:aws:kms:us-east-1:127380219712:key/be9c130b-5d53-40fd-b4fc-fcb21ce6cedc" >> $GITHUB_ENV
+          echo "SIGNING_SECRET=prod-document-image-handler" >> $GITHUB_ENV
       - name: Deploy Stack
         run: overrideWarningsEnabled=false npx cdk deploy --parameters CorsEnabledParameter=Yes --parameters CorsOriginParameter='*' --parameters SourceBucketsParameter=${{ env.SOURCE_BUCKET }} --parameters DeployDemoUIParameter=No --parameters EnableSignatureParameter=Yes --parameters SecretsManagerSecretParameter=${{ env.SIGNING_SECRET }} --parameters SecretsManagerKeyParameter=SECRET_KEY --parameters S3KmsKeyArnParameter="${{ env.S3_KMS_KEY_ARN }}" --context stackName=mslc-document-upload-image-handler-${{ env.STAGE }}
         working-directory: source/constructs
