@@ -1,0 +1,59 @@
+name: CI/CD
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+
+jobs:
+  deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.merged == true && (github.base_ref == 'qa' || github.base_ref == 'uat' || github.base_ref == 'main')
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+
+      - name: NPM install
+        run: npm run clean:install
+        working-directory: source/constructs
+      - name: Build image handler
+        run: npm run build
+        working-directory: source/image-handler
+
+      # Deploy cloudformation stack with CDK
+      - name: Set QA Environment
+        if: github.base_ref == 'qa'
+        run: |
+          echo "STAGE=qa" >> $GITHUB_ENV
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.LOWER_ENV_AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.LOWER_ENV_AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+          echo "SOURCE_BUCKET=mslc-player-qa-document-upload" >> $GITHUB_ENV
+          echo "S3_KMS_KEY_ARN=arn:aws:kms:us-east-1:963973445526:key/9ea6ef14-c12a-42c6-9e6d-56cc0f389bb4" >> $GITHUB_ENV
+          echo "SIGNING_SECRET=mslc-document-upload-qa" >> $GITHUB_ENV
+      - name: Set UAT Environment
+        if: github.base_ref == 'uat'
+        run: |
+          echo "STAGE=uat" >> $GITHUB_ENV
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.LOWER_ENV_AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.LOWER_ENV_AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+          echo "SOURCE_BUCKET=mslc-player-uat-document-upload" >> $GITHUB_ENV
+          echo "S3_KMS_KEY_ARN=arn:aws:kms:us-east-1:963973445526:key/60c48e18-9e6c-4f74-84c7-5241fd45eca3" >> $GITHUB_ENV
+          echo "SIGNING_SECRET=mslc-document-upload-uat" >> $GITHUB_ENV
+      - name: Set Prod Environment
+        if: github.base_ref == 'master'
+        run: |
+          echo "STAGE=prod" >> $GITHUB_ENV
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.PROD_AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+          echo "SOURCE_BUCKET=mslc-player-prod-document-upload" >> $GITHUB_ENV
+          echo "S3_KMS_KEY_ARN=arn:aws:kms:us-east-1:127380219712:key/be9c130b-5d53-40fd-b4fc-fcb21ce6cedc" >> $GITHUB_ENV
+          echo "SIGNING_SECRET=prod-document-image-handler" >> $GITHUB_ENV
+      - name: Deploy Stack
+        run: overrideWarningsEnabled=false npx cdk deploy --parameters CorsEnabledParameter=Yes --parameters CorsOriginParameter='*' --parameters SourceBucketsParameter=${{ env.SOURCE_BUCKET }} --parameters DeployDemoUIParameter=No --parameters EnableSignatureParameter=Yes --parameters SecretsManagerSecretParameter=${{ env.SIGNING_SECRET }} --parameters SecretsManagerKeyParameter=SECRET_KEY --parameters S3KmsKeyArnParameter="${{ env.S3_KMS_KEY_ARN }}" --context stackName=mslc-document-upload-image-handler-${{ env.STAGE }}
+        working-directory: source/constructs
