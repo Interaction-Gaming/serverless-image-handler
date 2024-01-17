@@ -2,7 +2,7 @@ name: CI/CD
 
 on:
   pull_request:
-    types: [opened, edited, reopened, synchronize]
+    types: [opened, edited, reopened, synchronize, closed]
 
 jobs:
   deploy:
@@ -46,7 +46,7 @@ jobs:
           echo "S3_KMS_KEY_ARN=arn:aws:kms:us-east-1:963973445526:key/60c48e18-9e6c-4f74-84c7-5241fd45eca3" >> $GITHUB_ENV
           echo "SIGNING_SECRET=mslc-document-upload-uat" >> $GITHUB_ENV
       - name: Set Prod Environment
-        if: github.base_ref == 'master'
+        if: github.base_ref == 'main'
         run: |
           echo "STAGE=prod" >> $GITHUB_ENV
           echo "AWS_ACCESS_KEY_ID=${{ secrets.PROD_AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
