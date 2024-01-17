@@ -44,7 +44,7 @@ In addition to the AWS Solutions Constructs, the solution uses AWS CDK directly 
 ## Prerequisites for Customization
 
 - [AWS Command Line Interface](https://aws.amazon.com/cli/)
-- Node.js 16.x or later
+- Node.js 20.x or later
 
 ### 1. Clone the repository
 
@@ -75,6 +75,20 @@ overrideWarningsEnabled=false npx cdk deploy\
    --profile <PROFILE_NAME>
 ```
 
+#### MSLC Deploy example:
+overrideWarningsEnabled=false npx cdk deploy\
+ --parameters CorsEnabledParameter=Yes\
+ --parameters CorsOriginParameter='*'\
+ --parameters SourceBucketsParameter=mslc-player-qa-document-upload\
+ --parameters DeployDemoUIParameter=No\
+ --parameters EnableSignatureParameter=Yes\
+ --parameters SecretsManagerSecretParameter=mslc-document-upload-qa\
+ --parameters SecretsManagerKeyParameter=SECRET_KEY\
+ --parameters S3KmsKeyArnParameter="arn:aws:kms:us-east-1:963973445526:key/9ea6ef14-c12a-42c6-9e6d-56cc0f389bb4"\
+ --context solutionName=mslc-document-upload-image-handler-qa\
+ --context stackName=mslc-document-upload-image-handler-qa\
+ --require-approval never
+
 _Note:_
 - **MY_BUCKET**: name of an existing bucket in your account
 - **PROFILE_NAME**: name of an AWS CLI profile that has appropriate credentials for deploying in your preferred region
@@ -102,6 +116,9 @@ This solution collects anonymous operational metrics to help AWS improve the qua
 - [@njtmead](https://github.com/njtmead) for [#276](https://github.com/aws-solutions/serverless-image-handler/pull/276)
 - [@StaymanHou](https://github.com/StaymanHou) for [#320](https://github.com/aws-solutions/serverless-image-handler/pull/320)
 - [@alenpaulvarghese](https://github.com/alenpaulvarghese) for [#392](https://github.com/aws-solutions/serverless-image-handler/pull/392)
+- [@Fjool](https://github.com/Fjool) for [#489](https://github.com/aws-solutions/serverless-image-handler/pull/489)
+- [@fvsnippets](https://github.com/fvsnippets) for [#373](https://github.com/aws-solutions/serverless-image-handler/pull/373), [#380](https://github.com/aws-solutions/serverless-image-handler/pull/380)
+- [@ccchapman](https://github.com/ccchapman) for [#490](https://github.com/aws-solutions/serverless-image-handler/pull/490)
 
 # License
 

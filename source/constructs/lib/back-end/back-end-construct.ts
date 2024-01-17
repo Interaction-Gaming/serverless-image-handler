@@ -17,8 +17,7 @@ import {
 } from "aws-cdk-lib/aws-cloudfront";
 import { HttpOrigin } from "aws-cdk-lib/aws-cloudfront-origins";
 import { Policy, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
-import { Runtime } from "aws-cdk-lib/aws-lambda";
-import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
+import {DockerImageCode, DockerImageFunction, Runtime} from "aws-cdk-lib/aws-lambda";
 import { LogGroup, RetentionDays } from "aws-cdk-lib/aws-logs";
 import { IBucket } from "aws-cdk-lib/aws-s3";
 import { ArnFormat, Aws, Duration, Lazy, Stack } from "aws-cdk-lib";
@@ -27,6 +26,7 @@ import { CloudFrontToApiGatewayToLambda } from "@aws-solutions-constructs/aws-cl
 
 import { addCfnSuppressRules } from "../../utils/utils";
 import { SolutionConstructProps } from "../types";
+import * as api from "aws-cdk-lib/aws-apigateway";
 
 export interface BackEndProps extends SolutionConstructProps {
   readonly solutionVersion: string;
@@ -35,6 +35,7 @@ export interface BackEndProps extends SolutionConstructProps {
   readonly logsBucket: IBucket;
   readonly uuid: string;
   readonly cloudFrontPriceClass: string;
+  readonly s3KmsKeyArn: string
 }
 
 export class BackEnd extends Construct {
@@ -49,35 +50,46 @@ export class BackEnd extends Construct {
     });
     props.secretsManagerPolicy.attachToRole(imageHandlerLambdaFunctionRole);
 
+    let statements = [
+      new PolicyStatement({
+        actions: ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"],
+        resources: [
+          Stack.of(this).formatArn({
+            service: "logs",
+            resource: "log-group",
+            resourceName: "/aws/lambda/*",
+            arnFormat: ArnFormat.COLON_RESOURCE_NAME,
+          }),
+        ],
+      }),
+      new PolicyStatement({
+        actions: ["s3:GetObject", "s3:PutObject", "s3:ListBucket"],
+        resources: [
+          Stack.of(this).formatArn({
+            service: "s3",
+            resource: "*",
+            region: "",
+            account: "",
+          }),
+        ],
+      }),
+      new PolicyStatement({
+        actions: ["rekognition:DetectFaces", "rekognition:DetectModerationLabels"],
+        resources: ["*"],
+      }),
+    ];
+
+    if (props.s3KmsKeyArn) {
+      statements.push(
+        new PolicyStatement({
+          actions: ["kms:decrypt"],
+          resources: [props.s3KmsKeyArn],
+        }),
+      )
+    }
+
     const imageHandlerLambdaFunctionRolePolicy = new Policy(this, "ImageHandlerFunctionPolicy", {
-      statements: [
-        new PolicyStatement({
-          actions: ["logs:CreateLogGroup", "logs:CreateLogStream", "logs:PutLogEvents"],
-          resources: [
-            Stack.of(this).formatArn({
-              service: "logs",
-              resource: "log-group",
-              resourceName: "/aws/lambda/*",
-              arnFormat: ArnFormat.COLON_RESOURCE_NAME,
-            }),
-          ],
-        }),
-        new PolicyStatement({
-          actions: ["s3:GetObject", "s3:PutObject", "s3:ListBucket"],
-          resources: [
-            Stack.of(this).formatArn({
-              service: "s3",
-              resource: "*",
-              region: "",
-              account: "",
-            }),
-          ],
-        }),
-        new PolicyStatement({
-          actions: ["rekognition:DetectFaces", "rekognition:DetectModerationLabels"],
-          resources: ["*"],
-        }),
-      ],
+      statements: statements,
     });
 
     addCfnSuppressRules(imageHandlerLambdaFunctionRolePolicy, [
@@ -85,13 +97,12 @@ export class BackEnd extends Construct {
     ]);
     imageHandlerLambdaFunctionRole.attachInlinePolicy(imageHandlerLambdaFunctionRolePolicy);
 
-    const imageHandlerLambdaFunction = new NodejsFunction(this, "ImageHandlerLambdaFunction", {
+    const imageHandlerLambdaFunction = new DockerImageFunction(this, "ImageHandlerLambdaFunction", {
       description: `${props.solutionName} (${props.solutionVersion}): Performs image edits and manipulations`,
       memorySize: 1024,
-      runtime: Runtime.NODEJS_16_X,
-      timeout: Duration.minutes(15),
+      timeout: Duration.seconds(29),
       role: imageHandlerLambdaFunctionRole,
-      entry: path.join(__dirname, "../../../image-handler/index.ts"),
+      code: DockerImageCode.fromImageAsset(path.join(__dirname, "../../../image-handler")),
       environment: {
         AUTO_WEBP: props.autoWebP,
         CORS_ENABLED: props.corsEnabled,
@@ -106,22 +117,7 @@ export class BackEnd extends Construct {
         DEFAULT_FALLBACK_IMAGE_BUCKET: props.fallbackImageS3Bucket,
         DEFAULT_FALLBACK_IMAGE_KEY: props.fallbackImageS3KeyBucket,
       },
-      bundling: {
-        externalModules: ["sharp"],
-        nodeModules: ["sharp"],
-        commandHooks: {
-          beforeBundling(inputDir: string, outputDir: string): string[] {
-            return [];
-          },
-          beforeInstall(inputDir: string, outputDir: string): string[] {
-            return [];
-          },
-          afterBundling(inputDir: string, outputDir: string): string[] {
-            return [`cd ${outputDir}`, "rm -rf node_modules/sharp && npm install --arch=x64 --platform=linux sharp"];
-          },
-        },
-      },
-    });
+    })
 
     const imageHandlerLogGroup = new LogGroup(this, "ImageHandlerLogGroup", {
       logGroupName: `/aws/lambda/${imageHandlerLambdaFunction.functionName}`,
@@ -140,7 +136,7 @@ export class BackEnd extends Construct {
       defaultTtl: Duration.days(1),
       minTtl: Duration.seconds(1),
       maxTtl: Duration.days(365),
-      enableAcceptEncodingGzip: true,
+      enableAcceptEncodingGzip: false,
       headerBehavior: CacheHeaderBehavior.allowList("origin", "accept"),
       queryStringBehavior: CacheQueryStringBehavior.allowList("signature"),
     });
@@ -196,6 +192,9 @@ export class BackEnd extends Construct {
         stageName: "image",
       },
       binaryMediaTypes: ["*/*"],
+      defaultMethodOptions: {
+        authorizationType: api.AuthorizationType.NONE,
+      },
     };
 
     const imageHandlerCloudFrontApiGatewayLambda = new CloudFrontToApiGatewayToLambda(
@@ -209,6 +208,14 @@ export class BackEnd extends Construct {
         apiGatewayProps,
       }
     );
+
+    addCfnSuppressRules(imageHandlerCloudFrontApiGatewayLambda.apiGateway, [
+      {
+        id: "W59",
+        reason:
+          "AWS::ApiGateway::Method AuthorizationType is set to 'NONE' because API Gateway behind CloudFront does not support AWS_IAM authentication",
+      },
+    ]);
 
     imageHandlerCloudFrontApiGatewayLambda.apiGateway.node.tryRemoveChild("Endpoint"); // we don't need the RestApi endpoint in the outputs
 
