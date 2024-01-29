@@ -1,6 +1,6 @@
 {
   "name": "image-handler",
-  "version": "6.2.3",
+  "version": "6.2.4",
   "private": true,
   "description": "A Lambda function for performing on-demand image edits and manipulations.",
   "license": "Apache-2.0",
@@ -12,7 +12,8 @@
   "scripts": {
     "clean": "rm -rf node_modules/ dist/ coverage/",
     "pretest": "npm run clean && npm ci",
-    "test": "jest --coverage --silent"
+    "test": "jest --coverage --silent",
+    "build": "tsc -p ./tsconfig.json"
   },
   "dependencies": {
     "aws-sdk": "^2.1477.0",

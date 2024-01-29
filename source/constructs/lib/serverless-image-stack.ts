@@ -130,6 +130,12 @@ export class ServerlessImageHandlerStack extends Stack {
       default: PriceClass.PRICE_CLASS_ALL,
     });
 
+    const s3KmsKeyArnParameter = new CfnParameter(this, "S3KmsKeyArnParameter", {
+      type: "String",
+      description: "ARN of the KMS key needed to decrypt s3 bucket contents",
+      default: "",
+    });
+
     const solutionMapping = new CfnMapping(this, "Solution", {
       mapping: {
         Config: {
@@ -177,6 +183,7 @@ export class ServerlessImageHandlerStack extends Stack {
       logsBucket: commonResources.logsBucket,
       uuid: commonResources.customResources.uuid,
       cloudFrontPriceClass: cloudFrontPriceClassParameter.valueAsString,
+      s3KmsKeyArn: s3KmsKeyArnParameter.valueAsString,
       ...solutionConstructProps,
     });
 

@@ -157,7 +157,11 @@ export class ImageRequest {
       const originalImage = await this.s3Client.getObject(imageLocation).promise();
       const imageBuffer = Buffer.from(originalImage.Body as Uint8Array);
 
-      if (originalImage.ContentType) {
+      if (key.endsWith(".heic")) {
+        result.contentType = ContentTypes.HEIC
+      } else if (key.endsWith(".heif")) {
+        result.contentType = ContentTypes.HEIF
+      } else if (originalImage.ContentType) {
         // If using default S3 ContentType infer from hex headers
         if (["binary/octet-stream", "application/octet-stream"].includes(originalImage.ContentType)) {
           result.contentType = this.inferImageType(imageBuffer);
@@ -430,8 +434,9 @@ export class ImageRequest {
    */
   public getOutputFormat(event: ImageHandlerEvent, requestType: RequestTypes = undefined): ImageFormatTypes {
     const { AUTO_WEBP } = process.env;
+    const accept = event.headers?.Accept || event.headers?.accept;
 
-    if (AUTO_WEBP === "Yes" && event.headers.Accept && event.headers.Accept.includes(ContentTypes.WEBP)) {
+    if (AUTO_WEBP === "Yes" && accept && accept.includes(ContentTypes.WEBP)) {
       return ImageFormatTypes.WEBP;
     } else if (requestType === RequestTypes.DEFAULT) {
       const decoded = this.decodeRequest(event);
@@ -456,6 +461,7 @@ export class ImageRequest {
       case "FFD8FFED":
       case "FFD8FFEE":
       case "FFD8FFE1":
+      case "FFD8FFE2":
         return ContentTypes.JPEG;
       case "52494646":
         return ContentTypes.WEBP;
